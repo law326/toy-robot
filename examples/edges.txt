@@ -1,0 +1,9 @@
+# Commands before PLACE are ignored
+MOVE
+REPORT
+PLACE 9,9,NORTH   # off the table: ignored
+PLACE 4,4,NORTH
+MOVE              # would fall: ignored
+RIGHT
+MOVE              # would fall: ignored
+REPORT
