@@ -24,22 +24,22 @@ module ToyRobot
 
     private
 
-    def execute(word, args = nil)
-      name = word.upcase
+    def execute(command_str, args = nil)
+      command = command_str.upcase
 
-      case name
+      case command
       when 'PLACE'  then place(args)
-      when 'MOVE'   then command(name, args) { 'would fall off the table' unless @robot.move }
-      when 'LEFT'   then command(name, args) { @robot.left && nil }
-      when 'RIGHT'  then command(name, args) { @robot.right && nil }
-      when 'REPORT' then command(name, args) { @output.puts(@robot.report) }
-      else               "unknown command #{word.inspect}"
+      when 'MOVE'   then exec_command(command, args) { 'would fall off the table' unless @robot.move }
+      when 'LEFT'   then exec_command(command, args) { @robot.left && nil }
+      when 'RIGHT'  then exec_command(command, args) { @robot.right && nil }
+      when 'REPORT' then exec_command(command, args) { @output.puts(@robot.report) }
+      else               "unknown command #{command_str.inspect}"
       end
     end
 
     # Runs the block only if the robot is placed and no arguments were given.
-    def command(name, args)
-      return "#{name} takes no arguments" if args
+    def exec_command(command, args)
+      return "#{command} takes no arguments" if args
       return 'robot is not placed' unless @robot.placed?
 
       yield
