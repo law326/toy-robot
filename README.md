@@ -111,3 +111,12 @@ coverage drops below 100%**. An HTML report is written to `coverage/`.
 - Adding a command means editing both `Robot` and `Simulator#execute`. A
   command-object design would remove that, but seemed over-engineered for this task.
 - Errors are streamed to an injected log. They aren't collected for later inspection.
+
+## Future Improvements
+
+- **Make the table size configurable from the CLI.** Table already takes width and height, but the CLI always uses 5x5. A --size WxH flag would be good, and this would make the simulator more extendable to different use cases.
+- **Obstacle surface.** Add obstacle surface class and commands to support different kind of surface.
+- **Animated work through display.** Add terminal animation so user can see each of the step and makes it easier to verify the result.
+- **Gamify this app** With the introduction of obstcale surface and the animated display, this app can potentially extend into a video game with maze built and user control the robot to lead the robot out of the maze.
+- **Command objects.** The current design is based on the five commands in the task, but as mentioned in the trade-offs, a command-object may be required if future requirement includes adding more than a few new commands.
+- **Structured error reporting.** Replace the log: stream with an injected reporter, if error counts, exit codes, some kind of anaylsis or different error display format is required.
