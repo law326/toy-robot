@@ -1,7 +1,7 @@
 # Toy Robot Simulator
 
 A Ruby simulation of a toy robot roaming a 5x5 table. Commands are read from a
-text file (or standard input). The robot can never fall off the table.
+text file. The robot can never fall off the table.
 
 ## Requirements
 
@@ -20,14 +20,12 @@ bundle install
 ## Run
 
 ```sh
-bin/toy_robot examples/basic.txt        # from a file
-bin/toy_robot < examples/basic.txt      # from stdin
-cat examples/basic.txt | bin/toy_robot -
+bin/toy_robot examples/basic.txt
 bin/toy_robot --verbose examples/edges.txt   # also log ignored lines to stderr
 bin/toy_robot --help
 ```
 
-Exit status: `0` success, `1` file cannot be read, `2` bad command-line usage.
+Exit status: `0` success, `1` file cannot be read, `2` bad command-line usage (including a missing FILE).
 Invalid *commands* never abort the run; they are skipped.
 
 ### Input format
@@ -91,7 +89,7 @@ Four small classes, each with one job:
 | `Table`     | Knows its bounds only (`in_bounds?`); size is configurable             |
 | `Robot`     | Owns position and heading; refuses unsafe or premature actions         |
 | `Simulator` | Parses lines of text and drives the robot; skips and logs bad lines    |
-| `CLI`       | Argument handling; wires a file or stdin to the simulator              |
+| `CLI`       | Argument handling; wires the input file to the simulator              |
 
 Collaborators are injected (the robot takes a table; the simulator takes the
 robot and the output/log streams), so each class is tested in isolation.

@@ -4,8 +4,8 @@ RSpec.describe ToyRobot::CLI do
   let(:stdout) { StringIO.new }
   let(:stderr) { StringIO.new }
 
-  def cli(argv, stdin: '')
-    described_class.new(argv, stdin: StringIO.new(stdin), stdout: stdout, stderr: stderr)
+  def cli(argv)
+    described_class.new(argv, stdout: stdout, stderr: stderr)
   end
 
   def with_file(content)
@@ -21,21 +21,13 @@ RSpec.describe ToyRobot::CLI do
     expect(stdout.string).to eq("1,1,NORTH\n")
   end
 
-  it 'reads from stdin when no file is given' do
-    expect(cli([], stdin: "PLACE 2,2,WEST\nREPORT\n").run).to eq(0)
-    expect(stdout.string).to eq("2,2,WEST\n")
-  end
-
-  it 'reads from stdin when the file is "-"' do
-    cli(['-'], stdin: "PLACE 2,2,WEST\nREPORT\n").run
-    expect(stdout.string).to eq("2,2,WEST\n")
-  end
-
   it 'logs ignored lines only with --verbose or -v' do
-    cli([], stdin: "MOVE\n").run
-    expect(stderr.string).to be_empty
-    cli(['-v'], stdin: "MOVE\n").run
-    cli(['--verbose'], stdin: "MOVE\n").run
+    with_file("MOVE\n") do |path|
+      cli([path]).run
+      expect(stderr.string).to be_empty
+      cli(['-v', path]).run
+      cli(['--verbose', path]).run
+    end
     expect(stderr.string.scan('line 1: ignored').size).to eq(2)
   end
 
@@ -57,6 +49,16 @@ RSpec.describe ToyRobot::CLI do
   it 'fails with usage for unknown options' do
     expect(cli(['--bogus']).run).to eq(2)
     expect(stderr.string).to include('unknown option --bogus', 'Usage')
+  end
+
+  it 'fails with usage when no file is given' do
+    expect(cli([]).run).to eq(2)
+    expect(stderr.string).to include('missing input file', 'Usage')
+  end
+
+  it 'does not treat "-" as standard input' do
+    expect(cli(['-']).run).to eq(2)
+    expect(stderr.string).to include('unknown option -')
   end
 
   it 'fails with usage for too many files' do
