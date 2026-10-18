@@ -36,6 +36,11 @@ RSpec.describe ToyRobot::Simulator do
     expect(out.string).to eq("2,2,EAST\n")
   end
 
+  it 're-places the robot on every valid PLACE' do
+    run("PLACE 0,0,NORTH\nREPORT\nPLACE 3,3,WEST\nREPORT\nMOVE\nREPORT\n")
+    expect(out.string).to eq("0,0,NORTH\n3,3,WEST\n2,3,WEST\n")
+  end
+
   it 'ignores case, whitespace, tabs, CRLF and spaces around commas' do
     run("  place 1, 2 ,North \r\n\tmove\t\r\nreport\r\n")
     expect(out.string).to eq("1,3,NORTH\n")

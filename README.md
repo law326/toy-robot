@@ -93,5 +93,3 @@ Four small classes, each with one job:
 
 Collaborators are injected (the robot takes a `surface:` implementing `in_bounds?`; the simulator takes the
 robot and the output/log streams), so each class is tested in isolation.
-Adding a simple command means a new `Robot` method and one entry in
-`Simulator::ACTIONS`.
