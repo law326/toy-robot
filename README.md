@@ -20,8 +20,8 @@ bundle install
 ## Run
 
 ```sh
-bin/toy_robot examples/basic.txt
-bin/toy_robot --verbose examples/edges.txt   # also log ignored lines to stderr
+bin/toy_robot example_commands/basic.txt
+bin/toy_robot --verbose example_commands/edges.txt   # also log ignored lines to stderr
 bin/toy_robot --help
 ```
 
