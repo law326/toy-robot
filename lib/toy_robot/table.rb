@@ -14,7 +14,7 @@ module ToyRobot
       @height = height
     end
 
-    def in_bounds?(x, y)
+    def walkable?(x, y)
       x.between?(0, width - 1) && y.between?(0, height - 1)
     end
   end

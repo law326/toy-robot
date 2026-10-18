@@ -86,10 +86,10 @@ Four small classes, each with one job:
 
 | Class       | Responsibility                                                         |
 |-------------|------------------------------------------------------------------------|
-| `Table`     | Knows its bounds only (`in_bounds?`); size is configurable             |
+| `Table`     | Knows which cells are walkable (`walkable?`); size is configurable     |
 | `Robot`     | Owns position and heading; refuses unsafe or premature actions         |
 | `Simulator` | Parses lines of text and drives the robot; skips and logs bad lines    |
 | `CLI`       | Argument handling; wires the input file to the simulator              |
 
-Collaborators are injected (the robot takes a `surface:` implementing `in_bounds?`; the simulator takes the
+Collaborators are injected (the robot takes a `surface:` implementing `walkable?`; the simulator takes the
 robot and the output/log streams), so each class is tested in isolation.

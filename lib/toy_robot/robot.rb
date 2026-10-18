@@ -17,7 +17,7 @@ module ToyRobot
 
     def place(x, y, facing)
       facing = facing.to_s.upcase
-      return false unless COMPASS.include?(facing) && @surface.in_bounds?(x, y)
+      return false unless COMPASS.include?(facing) && @surface.walkable?(x, y)
 
       @x = x
       @y = y
@@ -29,7 +29,7 @@ module ToyRobot
       return false unless placed?
 
       dx, dy = STEPS.fetch(@facing)
-      return false unless @surface.in_bounds?(@x + dx, @y + dy)
+      return false unless @surface.walkable?(@x + dx, @y + dy)
 
       @x += dx
       @y += dy
