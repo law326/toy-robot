@@ -80,16 +80,34 @@ runs RuboCop and then the specs.
 Coverage is measured by SimpleCov and the suite **fails if line or branch
 coverage drops below 100%**. An HTML report is written to `coverage/`.
 
-## Design
+## Approach
 
-Four small classes, each with one job:
+### Four small classes, each with one job
 
 | Class       | Responsibility                                                         |
 |-------------|------------------------------------------------------------------------|
 | `Table`     | Knows which cells are walkable (`walkable?`); size is configurable     |
 | `Robot`     | Owns position and heading; refuses unsafe or premature actions         |
 | `Simulator` | Parses lines of text and drives the robot; skips and logs bad lines    |
-| `CLI`       | Argument handling; wires the input file to the simulator              |
+| `CLI`       | Argument handling; wires the input file to the simulator               |
 
-Collaborators are injected (the robot takes a `surface:` implementing `walkable?`; the simulator takes the
-robot and the output/log streams), so each class is tested in isolation.
+### Key decisions/assumptions
+
+1. The "never fall off" rule is enforced where
+   the state is, so it holds no matter who calls the robot. Every action returns
+   true if carried out and false if ignored; the simulator only reports it.
+2. Invalid commands never abort a run.
+   Unknown commands, malformed or out-of-range `PLACE`, and commands before the
+   first valid `PLACE` are skipped, with the reason shown by `--verbose`.
+3. The robot takes a `surface` object which implements
+   `walkable?` method; the simulator takes the robot and the output/log streams. Each
+   class is tested in isolation, and a new kind of surface (for example one with
+   obstacles) needs no change to the robot.
+4. The parser allows any case, tabs, CRLF, spaces around commas, blank lines 
+   and `#` comments.
+
+### Trade-offs
+
+- Adding a command means editing both `Robot` and `Simulator#execute`. A
+  command-object design would remove that, but seemed over-engineered for this task.
+- Errors are streamed to an injected log. They aren't collected for later inspection.
