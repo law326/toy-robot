@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ToyRobot
-  # A rectangular surface with its south-west corner at (0,0).
+  # South-west corner is (0,0).
   class Table
     attr_reader :width, :height
 

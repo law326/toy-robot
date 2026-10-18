@@ -1,22 +1,17 @@
 # frozen_string_literal: true
 
 module ToyRobot
-  # Interprets lines of text as commands for a robot. Invalid or rejected
-  # lines are skipped (and optionally logged), never fatal.
-  #
+  # Interprets lines of text as robot commands; bad lines are skipped, never fatal.
   # Case, surrounding whitespace, blank lines and `#` comments are ignored.
   class Simulator
     PLACE_ARGS = /\A(-?\d+)\s*,\s*(-?\d+)\s*,\s*([A-Za-z]+)\z/
 
-    # @param output [#puts] receives REPORT output
-    # @param log [#puts, nil] receives a note for each ignored line
     def initialize(robot:, output: $stdout, log: nil)
       @robot = robot
       @output = output
       @log = log
     end
 
-    # @param input [#each_line]
     def run(input)
       input.each_line.with_index(1) do |line, number|
         text = line.sub(/#.*/, '').strip
@@ -29,7 +24,6 @@ module ToyRobot
 
     private
 
-    # @return [String, nil] why the command was ignored, or nil on success
     def execute(word, args = nil)
       name = word.upcase
 
@@ -43,9 +37,7 @@ module ToyRobot
       end
     end
 
-    # Shared preconditions for every command except PLACE; runs the block
-    # only if they hold.
-    # @return [String, nil] why the command was ignored, or nil on success
+    # Runs the block only if the robot is placed and no arguments were given.
     def command(name, args)
       return "#{name} takes no arguments" if args
       return 'robot is not placed' unless @robot.placed?

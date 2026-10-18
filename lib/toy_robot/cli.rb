@@ -2,7 +2,6 @@
 
 module ToyRobot
   # Command-line entry point: toy_robot [-v|--verbose] [-h|--help] FILE
-  # Commands are read from the text file FILE.
   class CLI
     USAGE = <<~TEXT
       Usage: toy_robot [options] FILE
@@ -18,7 +17,6 @@ module ToyRobot
       @stderr = stderr
     end
 
-    # @return [Integer] exit status: 0 ok, 1 unreadable file, 2 bad usage
     def run
       flags, files = @argv.partition { |arg| arg.start_with?('-') }
       return help if flags.intersect?(%w[-h --help])
@@ -34,7 +32,6 @@ module ToyRobot
 
     private
 
-    # @return [String, nil] what is wrong with the arguments, if anything
     def usage_problem(flags, files)
       unknown = flags - VERBOSE_FLAGS
       return "unknown option #{unknown.first}" unless unknown.empty?

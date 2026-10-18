@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
 module ToyRobot
-  # Owns position and heading, and refuses any action that would put it
-  # off the table or that is attempted before it has been placed.
-  # Every action returns true if it was carried out, false if ignored.
+  # Owns position and heading; refuses unsafe or premature actions.
+  # Every action returns true if carried out, false if ignored.
   class Robot
-    COMPASS = %w[NORTH EAST SOUTH WEST].freeze
     STEPS = { 'NORTH' => [0, 1], 'EAST' => [1, 0], 'SOUTH' => [0, -1], 'WEST' => [-1, 0] }.freeze
+    COMPASS = STEPS.keys.freeze
 
     def initialize(table)
       @table = table
@@ -45,7 +44,6 @@ module ToyRobot
       rotate(1)
     end
 
-    # @return [String, nil] "X,Y,F", or nil if not placed
     def report
       "#{@x},#{@y},#{@facing}" if placed?
     end
