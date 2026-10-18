@@ -1,0 +1,29 @@
+plugins:
+  - rubocop-rake
+  - rubocop-rspec
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.0
+  SuggestExtensions: false
+  Exclude:
+    - coverage/**/*
+    - vendor/**/*
+
+Naming/MethodParameterName:
+  AllowedNames: [x, y]
+
+# Robot actions are commands that report success; they are not predicates.
+Naming/PredicateMethod:
+  Enabled: false
+
+# Simulator#execute is one flat case over the command set.
+Metrics/CyclomaticComplexity:
+  Max: 9
+
+# Specs deliberately assert several related facts per scenario.
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Max: 12

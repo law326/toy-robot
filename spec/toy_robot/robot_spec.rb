@@ -3,7 +3,7 @@
 RSpec.describe ToyRobot::Robot do
   let(:robot) { described_class.new(ToyRobot::Table.new) }
 
-  context 'before being placed' do
+  context 'when not yet placed' do
     it 'ignores everything' do
       expect(robot).not_to be_placed
       expect([robot.move, robot.left, robot.right]).to all(be false)

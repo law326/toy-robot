@@ -76,6 +76,9 @@ outputs `3,3,NORTH`.
 bundle exec rspec        # or: bundle exec rake
 ```
 
+Style is checked with RuboCop (`bundle exec rubocop`). `bundle exec rake`
+runs RuboCop and then the specs.
+
 Coverage is measured by SimpleCov and the suite **fails if line or branch
 coverage drops below 100%**. An HTML report is written to `coverage/`.
 

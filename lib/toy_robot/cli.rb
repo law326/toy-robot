@@ -10,6 +10,8 @@ module ToyRobot
           -h, --help      Show this help
     TEXT
 
+    VERBOSE_FLAGS = %w[-v --verbose].freeze
+
     def initialize(argv, stdin: $stdin, stdout: $stdout, stderr: $stderr)
       @argv = argv
       @stdin = stdin
@@ -21,9 +23,9 @@ module ToyRobot
     def run
       flags, files = @argv.partition { |arg| arg.start_with?('-') && arg != '-' }
       return help if flags.intersect?(%w[-h --help])
-      return usage_error("unknown option #{(flags - %w[-v --verbose]).first}") unless
-        (flags - %w[-v --verbose]).empty?
-      return usage_error('too many arguments') if files.size > 1
+
+      problem = usage_problem(flags, files)
+      return usage_error(problem) if problem
 
       simulate(files.first, verbose: !flags.empty?)
     rescue SystemCallError => e
@@ -32,6 +34,14 @@ module ToyRobot
     end
 
     private
+
+    # @return [String, nil] what is wrong with the arguments, if anything
+    def usage_problem(flags, files)
+      unknown = flags - VERBOSE_FLAGS
+      return "unknown option #{unknown.first}" unless unknown.empty?
+
+      'too many arguments' if files.size > 1
+    end
 
     def simulate(path, verbose:)
       simulator = Simulator.new(robot: Robot.new(Table.new), output: @stdout,
