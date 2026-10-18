@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe ToyRobot::Robot do
-  let(:robot) { described_class.new(ToyRobot::Table.new) }
+  let(:robot) { described_class.new(surface: ToyRobot::Table.new) }
 
   context 'when not yet placed' do
     it 'ignores everything' do

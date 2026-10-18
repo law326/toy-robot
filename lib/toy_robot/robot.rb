@@ -7,8 +7,8 @@ module ToyRobot
     STEPS = { 'NORTH' => [0, 1], 'EAST' => [1, 0], 'SOUTH' => [0, -1], 'WEST' => [-1, 0] }.freeze
     COMPASS = STEPS.keys.freeze
 
-    def initialize(table)
-      @table = table
+    def initialize(surface:)
+      @surface = surface
     end
 
     def placed?
@@ -17,7 +17,7 @@ module ToyRobot
 
     def place(x, y, facing)
       facing = facing.to_s.upcase
-      return false unless COMPASS.include?(facing) && @table.in_bounds?(x, y)
+      return false unless COMPASS.include?(facing) && @surface.in_bounds?(x, y)
 
       @x = x
       @y = y
@@ -29,7 +29,7 @@ module ToyRobot
       return false unless placed?
 
       dx, dy = STEPS.fetch(@facing)
-      return false unless @table.in_bounds?(@x + dx, @y + dy)
+      return false unless @surface.in_bounds?(@x + dx, @y + dy)
 
       @x += dx
       @y += dy

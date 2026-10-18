@@ -3,7 +3,7 @@
 RSpec.describe ToyRobot::Simulator do
   let(:out) { StringIO.new }
   let(:log) { StringIO.new }
-  let(:robot) { ToyRobot::Robot.new(ToyRobot::Table.new) }
+  let(:robot) { ToyRobot::Robot.new(surface: ToyRobot::Table.new) }
   let(:simulator) { described_class.new(robot: robot, output: out, log: log) }
 
   def run(text) = simulator.run(StringIO.new(text))

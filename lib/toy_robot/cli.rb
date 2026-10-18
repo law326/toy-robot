@@ -42,7 +42,7 @@ module ToyRobot
     end
 
     def simulate(path, verbose:)
-      simulator = Simulator.new(robot: Robot.new(Table.new), output: @stdout,
+      simulator = Simulator.new(robot: Robot.new(surface: Table.new), output: @stdout,
                                 log: (@stderr if verbose))
       File.open(path) { |file| simulator.run(file) }
       0
