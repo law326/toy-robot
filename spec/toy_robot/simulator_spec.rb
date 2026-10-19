@@ -79,6 +79,45 @@ RSpec.describe ToyRobot::Simulator do
     )
   end
 
+  it 'rejects negative and oversized PLACE coordinates as invalid placements' do
+    run("PLACE -1,0,NORTH\nPLACE 0,-1,NORTH\nPLACE 99999999999999999999,0,NORTH\nREPORT\n")
+    expect(out.string).to be_empty
+    expect(log.string.lines.map(&:chomp)).to eq(
+      ['line 1: ignored (invalid placement)',
+       'line 2: ignored (invalid placement)',
+       'line 3: ignored (invalid placement)',
+       'line 4: ignored (robot is not placed)']
+    )
+  end
+
+  it 'does not accept non-ASCII digits in PLACE' do
+    run("PLACE ９,0,NORTH\nREPORT\n")
+    expect(out.string).to be_empty
+    expect(log.string).to include('line 1: ignored (PLACE expects X,Y,F')
+  end
+
+  it 'treats # inside PLACE arguments as the start of a comment' do
+    run("PLACE 1,#1,NORTH\nREPORT\nPLACE 2,2,NORTH#\nREPORT\n")
+    expect(out.string).to eq("2,2,NORTH\n")
+    expect(log.string.lines.map(&:chomp)).to eq(
+      ['line 1: ignored (PLACE expects X,Y,F but got "1,")',
+       'line 2: ignored (robot is not placed)']
+    )
+  end
+
+  it 'logs unknown commands in their original case' do
+    run("Jump\nfLy 1\n")
+    expect(log.string.lines.map(&:chomp)).to eq(
+      ['line 1: ignored (unknown command "Jump")',
+       'line 2: ignored (unknown command "fLy")']
+    )
+  end
+
+  it 'reports the same state on consecutive REPORTs' do
+    run("PLACE 2,3,WEST\nREPORT\nREPORT\nREPORT\n")
+    expect(out.string).to eq("2,3,WEST\n" * 3)
+  end
+
   it 'works without a log' do
     quiet = described_class.new(robot: robot, output: out)
     expect { quiet.run(StringIO.new("JUMP\n")) }.not_to raise_error
