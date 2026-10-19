@@ -94,17 +94,18 @@ coverage drops below 100%**. An HTML report is written to `coverage/`.
 
 ### Key decisions/assumptions
 
-1. The "never fall off" rule is enforced where
+1. Any invalid PLACE after a valid one is ignored and keep the old position.
+2. The "never fall off" rule is enforced where
    the state is, so it holds no matter who calls the robot. Every action returns
    true if carried out and false if ignored; the simulator only reports it.
-2. Invalid commands never abort a run.
+3. Invalid commands never abort a run.
    Unknown commands, malformed or out-of-range `PLACE`, and commands before the
    first valid `PLACE` are skipped, with the reason shown by `--verbose`.
-3. The robot takes a `surface` object which implements
+4. The robot takes a `surface` object which implements
    `walkable?` method; the simulator takes the robot and the output/log streams. Each
    class is tested in isolation, and a new kind of surface (for example one with
    obstacles) needs no change to the robot.
-4. The parser allows any case, tabs, CRLF, spaces around commas, blank lines 
+5. The parser allows any case, tabs, CRLF, spaces around commas, blank lines 
    and `#` comments.
 
 ### Trade-offs
