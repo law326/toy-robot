@@ -10,8 +10,9 @@ text file. The robot can never fall off the table.
 
 ## Build / install
 
-There is nothing to compile. The application itself uses only the Ruby standard
-library. For the test tooling:
+There is nothing to compile and you can run it directly if you have Ruby installed. 
+The application itself uses only the Ruby standard library. 
+However, you need Bundler and install the dependencies for the test tooling:
 
 ```sh
 bundle install
